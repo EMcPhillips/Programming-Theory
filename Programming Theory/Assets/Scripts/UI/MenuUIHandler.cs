@@ -16,11 +16,11 @@ public class MenuUIHandler : MonoBehaviour
     public void StartNew()//Start new game
     {
 
-        //if (MainManager.Instance.playerHasName == true)
-        //{
-            //SceneManager.LoadScene(1);
+        if (MainManager.Instance.playerHasName == true)
+        {
+            SceneManager.LoadScene(1);
            // MainManager.Instance.LoadHighScore();
-        //}
+        }
     }
 
     public void Exit() //Exits the game

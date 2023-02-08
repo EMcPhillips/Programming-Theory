@@ -19,7 +19,7 @@ public class MainManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        //LoadHighScore();
         Debug.Log(Application.persistentDataPath);
     }
+
 }
