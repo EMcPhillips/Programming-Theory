@@ -49,7 +49,7 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        AttackRange();
+        AttackRange(); //ABSTRACTION
     }
 
    public virtual void OnTriggerEnter (Collider other)

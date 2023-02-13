@@ -11,7 +11,7 @@ public class MainManager : MonoBehaviour
     public bool difficultySet = false;
     [SerializeField]
     private int m_enemyHealth = 100;
-    public int enemyHealth
+    public int enemyHealth //ENCAPSULATION
     {
         get { return m_enemyHealth; }
         set { m_enemyHealth = value; }
@@ -37,7 +37,7 @@ public class MainManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Menu();
+            Menu(); //ABSTRACTION
         }
     }
     public void Menu() //Return to menu
