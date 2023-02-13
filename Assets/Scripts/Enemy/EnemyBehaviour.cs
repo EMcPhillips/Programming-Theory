@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    public int enemyHealth = 100;
+    public int enemyHealth;
     public float moveSpeed = 6.0f;
     public float maxAttackDist = 50.0f;
     private float returnSpeed = 5.0f;
@@ -25,10 +25,12 @@ public class EnemyBehaviour : MonoBehaviour
     private NavMeshAgent agent;
 
     public GameManager gameManager;
-
+    public MainManager mainManager;
+    
     // Start is called before the first frame update
     void Start()
     {
+
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         
         audioSource = GetComponent<AudioSource>();
@@ -37,6 +39,9 @@ public class EnemyBehaviour : MonoBehaviour
         agent.autoBraking = false;
 
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        mainManager = GameObject.Find("MainManager").GetComponent<MainManager>();
+
+        enemyHealth = mainManager.enemyHealth;
 
         GotoNextPoint();
     }

@@ -7,16 +7,25 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public int playerHealth;
-    public int killCount = 0;
+    private int m_playerHealth;
+    public int playerHealth
+    {
+        get { return m_playerHealth; }
+        set { m_playerHealth = value; }
+    }
+    public int enemyHealth;
+    public float killCount;
     public TextMeshProUGUI gameOverText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI currentObjectivetext;
     public TextMeshProUGUI gameWonText;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI killCounttext;
+    public TextMeshProUGUI finalScore;
     public Button menuButton;
     public Button restartButton;
+    public float timer = 0f;
+    public float killMultiplier = 5.0f;
     public bool gameOver = false;
     public bool gameWon = false;
     public bool firstObjective = false; //PlayerController.cs
@@ -24,12 +33,16 @@ public class GameManager : MonoBehaviour
     public bool thirdObjective = false; //Shoot.cs
     public bool fourthObjective = false; //EnemyBehaviour.cs
     public bool fifthObjective = false; //Spawner.cs
-
+    private MainManager mainManager;
     // Start is called before the first frame update
     void Start()
     {
-        playerHealth = 100;
+        m_playerHealth = 100;
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        mainManager = GameObject.Find("MainManager").GetComponent<MainManager>();
+        timer = mainManager.timer;
+        killCount = mainManager.killCount;
     }
 
     // Update is called once per frame
@@ -40,20 +53,22 @@ public class GameManager : MonoBehaviour
         CurrentObjective();
         GameWon();
         KillCount();
+        Score();
     }
 
     void CheckDead()
     {
-        if (playerHealth <= 0)
+        if (m_playerHealth <= 0)
         {
             gameOver = true;
             gameOverText.gameObject.SetActive(true);
             menuButton.gameObject.SetActive(true);
-            restartButton.gameObject.SetActive(true);
+            restartButton.gameObject.SetActive(true); 
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Debug.Log("Game Over");
         }
-        else if (playerHealth <= 30)
+        else if (m_playerHealth <= 30)
         {
             healthText.color = Color.red;
         }
@@ -61,18 +76,9 @@ public class GameManager : MonoBehaviour
 
     private void UI()
     {
-        healthText.text = "Player health : " + playerHealth;
+        healthText.text = "Player health : " + m_playerHealth;
     }
 
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(1);
-    }
-
-    public void MenuButton()
-    {
-        SceneManager.LoadScene(0);
-    }
 
     public void GameWon()
     {
@@ -81,15 +87,30 @@ public class GameManager : MonoBehaviour
             gameWonText.gameObject.SetActive(true);
             menuButton.gameObject.SetActive(true);
             restartButton.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
     }
 
+    public void Score()
+    {
+        if (!gameOver && !gameWon)
+        {
+            timer += 1 * Time.deltaTime; 
+            timerText.text = "Time: " + Mathf.Round(timer);
+        }
+        else if(gameWon == true)
+        {
+            finalScore.gameObject.SetActive(true);
+            finalScore.text = "Final score: " + (Mathf.Round(timer) - (killCount * killMultiplier));
+        }
+    }
 
     private void KillCount()
     {
         killCounttext.text = "Enemies destroyed: " + killCount;
     }
+
 
     public void CurrentObjective()
     {

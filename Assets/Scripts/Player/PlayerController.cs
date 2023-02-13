@@ -13,8 +13,6 @@ public class PlayerController : MonoBehaviour
     public float sprintSpeed = 10.0f;
     public bool isOnGround = true;
 
-    public float mouseSensitivity = 1.0f;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -27,13 +25,10 @@ public class PlayerController : MonoBehaviour
     {
         if (gameManager.gameOver == false)
         {
-            if (gameManager.gameWon == false)
-            {
-                MovePlayer();
-                CameraControl();
-                PlayerJump();
-                ResetPosition();
-            }
+            MovePlayer();
+            CameraControl();
+            PlayerJump();
+            ResetPosition();
         }
     }
     
@@ -72,8 +67,12 @@ public class PlayerController : MonoBehaviour
 
     public void CameraControl()
     {
-        transform.localRotation = Quaternion.AngleAxis(transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity, Vector3.up);
-        Camera.main.transform.localRotation = Quaternion.AngleAxis(Camera.main.transform.localEulerAngles.x - Input.GetAxis("Mouse Y") * mouseSensitivity, Vector3.right);
+        if (gameManager.gameOver == false || gameManager.gameWon == false)
+        {
+            float mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1);
+            transform.localRotation = Quaternion.AngleAxis(transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity, Vector3.up);
+            Camera.main.transform.localRotation = Quaternion.AngleAxis(Camera.main.transform.localEulerAngles.x - Input.GetAxis("Mouse Y") * mouseSensitivity, Vector3.right);
+        }
     }
 
     public void FirstObjective()

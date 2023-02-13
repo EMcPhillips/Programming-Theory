@@ -16,6 +16,7 @@ public class BossBehaviour : EnemyBehaviour
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        mainManager = GameObject.Find("MainManager").GetComponent<MainManager>();
         spawnPoint = GameObject.Find("BossSpawner").GetComponent<Transform>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
@@ -23,14 +24,14 @@ public class BossBehaviour : EnemyBehaviour
         Instantiate(spawnParticle, transform.position, transform.rotation);
         hasBeenHit = false;
         targetPlayer = false;
-        enemyHealth = 800;
+        enemyHealth = mainManager.enemyHealth * 8;
     }
 
     // Update is called once per frame
     void Update()
     {
-        AttackRange();
-        DeathSequence();
+        AttackRange(); //ABSTRACTION
+        DeathSequence(); //ABSTRACTION
     }
 
     public override void OnTriggerEnter(Collider other)
@@ -54,13 +55,13 @@ public class BossBehaviour : EnemyBehaviour
         }
     }
 
-    public override void AttackRange()
+    public override void AttackRange() //POLYMORPHISM
     {
         //base.AttackRange();
         float distance = Vector3.Distance(transform.position, target.position);
         if (hasBeenHit == false)
         {
-            AttackSequence();
+            AttackSequence(); //INHERITANCE
         }
         else
         {
@@ -96,16 +97,10 @@ public class BossBehaviour : EnemyBehaviour
         {
             audioSource.PlayOneShot(deathAudio, 1.0f);
             Instantiate(deathExplosionParticle, transform.position, transform.rotation);
-            StartCoroutine(DestroyCountdown());
+            Instantiate(deathParticle, transform.position, transform.rotation);
+            Destroy(gameObject);
             gameManager.gameWon = true;
         }
-    }
-
-    IEnumerator DestroyCountdown()
-    {
-        yield return new WaitForSeconds(1.0f);
-        Instantiate(deathParticle, transform.position, transform.rotation);
-        Destroy(gameObject);
     }
 
     private void ReturnToSpawn()

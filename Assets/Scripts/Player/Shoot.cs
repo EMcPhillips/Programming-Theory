@@ -21,7 +21,10 @@ public class Shoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ShootGun();
+        if(gameManager.gameOver == false || gameManager.gameWon == false)
+        {
+            ShootGun();
+        }
     }
 
     void ShootGun()

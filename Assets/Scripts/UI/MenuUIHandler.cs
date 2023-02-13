@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
-
-// Attatched to the canvas game object in all scenes
+using UnityEngine.UI;
 
 public class MenuUIHandler : MonoBehaviour
 {
-    public void Menu() //Return to menu
+    private MainManager mainManager;
+
+    private void Start()
     {
-        SceneManager.LoadScene(0);
+        mainManager = GameObject.Find("MainManager").GetComponent<MainManager>();
     }
 
-    public void StartNew()//Start new game
+    public void Menu() //Return to menu
     {
+        mainManager.Menu();
+    }
 
-        if (MainManager.Instance.playerHasName == true)
-        {
-            SceneManager.LoadScene(1);
-           // MainManager.Instance.LoadHighScore();
-        }
+    public void Restart()//Start new game
+    {
+        mainManager.StartGame();
     }
 
     public void Exit() //Exits the game
